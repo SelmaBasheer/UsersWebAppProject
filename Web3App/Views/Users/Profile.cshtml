@@ -1,0 +1,54 @@
+﻿@model ProfileDto
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+	var appUser = await UserManager.GetUserAsync(User);
+}
+
+
+<div class="row">
+	<div class="col-md-8 mx-auto rounded border p-4">
+		<h2 class="mb-3">Profile</h2>
+		<hr />
+
+		
+
+		<div class="row mb-2">
+			<div class="col-sm-4">First Name</div>
+			<div class="col-sm-8">@appUser?.FirstName</div>
+		</div>
+
+		<div class="row mb-2">
+			<div class="col-sm-4">Last Name</div>
+			<div class="col-sm-8">@appUser?.LastName</div>
+		</div>
+
+		<div class="row mb-2">
+			<div class="col-sm-4">Phone</div>
+			<div class="col-sm-8">@appUser?.PhoneNumber</div>
+		</div>
+
+		<div class="row mb-2">
+			<div class="col-sm-4">Address</div>
+			<div class="col-sm-8">@appUser?.Address</div>
+		</div>
+
+		<div class="row mb-2">
+			<div class="col-sm-4">Email</div>
+			<div class="col-sm-8">@appUser?.Email</div>
+		</div>
+
+		<div class="row mb-2">
+			<div class="col-sm-4">Created At</div>
+			<div class="col-sm-8">@appUser?.CreatedDate</div>
+		</div>
+
+		<div>
+			<a class="btn btn-primary" asp-controller="Users" asp-action="Index">Done</a>
+			
+
+		</div>
+	</div>
+
+	

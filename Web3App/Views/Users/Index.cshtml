@@ -1,0 +1,81 @@
+﻿@model List<ApplicationUser>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@{
+    string search = (string)ViewData["Search"]!;
+}
+
+<h2 class="text-center mb-5">List of Users</h2>
+
+<div class="row mb-5">
+    <div class="col">
+        <a class="btn btn-primary" asp-controller="Users" asp-action="Create">New User</a>
+    </div>
+    <div class="col">
+        <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" name="search" value="@search" placeholder="Search by Name or Email" aria-label="Search">
+            <button class="btn btn-outline-success" asp-controller="Users" asp-action="Index" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class='alert alert-warning alert-dismissible fade show' role='alert'>
+        <strong>@ViewBag.ErrorMessage</strong>
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+    </div>
+}
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Created Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach(var user in Model)
+        {
+            <tr>
+                <td>@(user.FirstName + " " + user.LastName)</td>
+                <td>@user.Email</td>
+                <td>@user.PhoneNumber</td>
+                <td>
+                    @{
+                        var roles = await UserManager.GetRolesAsync(user);
+                        var rolesStr = String.Join(", ", roles);
+
+                        string color = "bg-secondary";
+                        if (roles.Contains("admin"))
+                        {
+                            color = "bg-danger";
+                        }
+                        else if (roles.Contains("seller"))
+                        {
+                            color = "bg-warning text-dark";
+                        }
+                        else if (roles.Contains("client"))
+                        {
+                            color = "bg-info text-dark";
+                        }
+
+
+                        <span class="badge rounded-pill @color">@rolesStr</span>
+                    }
+
+                </td>
+                <td>@user.CreatedDate.ToString("MM/dd/yyyy")</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-controller="Users" asp-action="Details" asp-route-id="@user.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
